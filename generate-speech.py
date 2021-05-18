@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 from os import path, makedirs
 from pathlib import Path
+from re import sub
 
 from google.cloud import texttospeech
 
@@ -18,17 +19,7 @@ def parse_args():
 
 
 def text_to_filename(text, suffix=".mp3") -> str:
-    return (
-        text.lower()
-              .replace("-", "")
-              .replace(".", "")
-              .replace(":", "")
-              .replace(",", "")
-              .replace("?", "")
-              .replace("!", "")
-              .replace("-", "")
-              .replace(" ", "-")
-    ) + suffix
+    return sub(r"[-.,?!-/ ]", "", text.lower()) + suffix
 
 
 def synthesize_speech(text: str, language_code: str) -> bytes:
